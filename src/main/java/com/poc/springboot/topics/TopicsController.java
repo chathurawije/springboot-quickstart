@@ -1,22 +1,43 @@
 package com.poc.springboot.topics;
 
-import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TopicsController {
 
-	
+	@Autowired
+	private TopicService topicService;
+
 	@RequestMapping("/topics")
 	public List<Topic> returnTopics() {
-		return Arrays.asList(
-				new Topic("TopicId1","TopicName1","TopicDescription1"),
-				new Topic("TopicId2","TopicName2","TopicDescription2"),
-				new Topic("TopicId3","TopicName3","TopicDescription3")
-
-				);
+		return topicService.getAllTopics();
 	}
+
+	@RequestMapping("/topics/{id}")
+	public Topic returnTopic(@PathVariable String id) {
+		return topicService.getTopic(id);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/topics")
+	public void addTopic(@RequestBody Topic topic) {
+		topicService.getTopic(topic);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/topics/{id}")
+	public void updateTopic(@RequestBody Topic topic, @PathVariable String id) {
+		topicService.updateTopic(topic, id);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/topics/{id}")
+	public void deleteTopic(@PathVariable String id) {
+		topicService.deleteTopic(id);
+	}
+
 }
